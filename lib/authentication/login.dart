@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../components/layout.dart';
 
 class LoginPage extends StatefulWidget {
@@ -8,16 +9,73 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+bool isValidEmail(String email) {
+  final emailRegex = RegExp(
+    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+  );
+  return emailRegex.hasMatch(email);
+}
+
 class _LoginPageState extends State<LoginPage> {
   bool passwordVisible = false;
+  bool isLoading = false;
+  String? errorText;
 
-  final TextEditingController usernameCtrl = TextEditingController();
+  final TextEditingController emailCtrl = TextEditingController();
   final TextEditingController passwordCtrl = TextEditingController();
 
   final OutlineInputBorder field = OutlineInputBorder(
     borderRadius: BorderRadius.circular(10),
     borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
   );
+
+  Future<void> _login() async {
+    final email = emailCtrl.text.trim();
+    final password = passwordCtrl.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      setState(() => errorText = 'Email dan password wajib diisi');
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      setState(() => errorText = 'Email tidak valid');
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+      errorText = null;
+    });
+
+    try {
+      await Supabase.instance.client.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+
+      if (!mounted) return;
+
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/homepage',
+            (route) => false,
+      );
+    } on AuthException catch (e) {
+      setState(() => errorText = e.message);
+    } catch (_) {
+      setState(() => errorText = 'Login gagal');
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
+  @override
+  void dispose() {
+    emailCtrl.dispose();
+    passwordCtrl.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,17 +89,19 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           const Center(
             child: Text(
-              "Login or Register",
+              "Login",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
+
           const SizedBox(height: 24),
 
-          // Username
-          const Text("Username"),
+          // EMAIL
+          const Text("Email"),
           const SizedBox(height: 6),
           TextField(
-            controller: usernameCtrl,
+            controller: emailCtrl,
+            keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               border: field,
               enabledBorder: field,
@@ -58,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
 
           const SizedBox(height: 16),
 
-          // Password
+          // PASSWORD
           const Text("Password"),
           const SizedBox(height: 6),
           TextField(
@@ -76,9 +136,11 @@ class _LoginPageState extends State<LoginPage> {
               contentPadding:
               const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
               suffixIcon: IconButton(
-                icon: Icon(passwordVisible
-                    ? Icons.visibility
-                    : Icons.visibility_off),
+                icon: Icon(
+                  passwordVisible
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                ),
                 onPressed: () {
                   setState(() {
                     passwordVisible = !passwordVisible;
@@ -88,14 +150,27 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
 
+          const SizedBox(height: 12),
+
+          // ERROR TEXT
+          if (errorText != null)
+            Center(
+              child: Text(
+                errorText!,
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+
           const SizedBox(height: 24),
 
+          // LOGIN BUTTON
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/homepage');
-              },
+              onPressed: isLoading ? null : _login,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF2E64A5),
                 foregroundColor: Colors.white,
@@ -104,11 +179,12 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text("Log In"),
+              child: Text(isLoading ? "Logging in..." : "Log In"),
             ),
           ),
 
           const SizedBox(height: 8),
+
           Center(
             child: TextButton(
               onPressed: () {

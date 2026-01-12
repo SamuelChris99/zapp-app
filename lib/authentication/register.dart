@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../components/layout.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -16,27 +17,117 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController passwordCtrl = TextEditingController();
   final TextEditingController confirmCtrl = TextEditingController();
 
+  final supabase = Supabase.instance.client;
+
   final OutlineInputBorder fieldBorder = OutlineInputBorder(
     borderRadius: BorderRadius.circular(10),
     borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
   );
 
   @override
+  void dispose() {
+    usernameCtrl.dispose();
+    passwordCtrl.dispose();
+    confirmCtrl.dispose();
+    super.dispose();
+  }
+
+  // ===============================
+  // PASSWORD VALIDATION
+  // ===============================
+  String? validatePassword(String password) {
+    if (password.length < 6) {
+      return 'Password minimal 6 karakter';
+    }
+    if (!RegExp(r'[a-z]').hasMatch(password)) {
+      return 'Password harus ada huruf kecil';
+    }
+    if (!RegExp(r'[A-Z]').hasMatch(password)) {
+      return 'Password harus ada huruf besar';
+    }
+    if (!RegExp(r'[0-9]').hasMatch(password)) {
+      return 'Password harus ada angka';
+    }
+    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) {
+      return 'Password harus ada simbol';
+    }
+    return null;
+  }
+
+  // ===============================
+  // REGISTER LOGIC
+  // ===============================
+  Future<void> _completeRegistration() async {
+    final username = usernameCtrl.text.trim();
+    final password = passwordCtrl.text;
+    final confirm = confirmCtrl.text;
+
+    if (username.isEmpty) {
+      _error('Username wajib diisi');
+      return;
+    }
+
+    final passwordError = validatePassword(password);
+    if (passwordError != null) {
+      _error(passwordError);
+      return;
+    }
+
+    if (password != confirm) {
+      _error('Password dan konfirmasi tidak sama');
+      return;
+    }
+
+    final user = supabase.auth.currentUser;
+    if (user == null) {
+      _error('Session habis, silakan login ulang');
+      return;
+    }
+
+    try {
+      // 1️⃣ Set password ke Supabase Auth
+      await supabase.auth.updateUser(
+        UserAttributes(password: password),
+      );
+
+      // 2️⃣ Simpan username ke table profiles
+      await supabase.from('profiles').insert({
+        'id': user.id,
+        'username': username,
+      });
+
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, '/login');
+    } catch (e) {
+      debugPrint('REGISTER ERROR: $e');
+      _error('Username sudah digunakan atau terjadi kesalahan');
+    }
+  }
+
+  void _error(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
+  // ===============================
+  // UI
+  // ===============================
+  @override
   Widget build(BuildContext context) {
     return AuthLayout(
       buttonText: "Create new account",
-      onButtonPressed: () {
-        Navigator.pushNamed(context, '/login');
-      },
+      onButtonPressed: _completeRegistration,
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Center(
             child: Text(
-              "Login or Register",
+              "Create Account",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
+
           const SizedBox(height: 24),
 
           // USERNAME
@@ -45,17 +136,18 @@ class _RegisterPageState extends State<RegisterPage> {
           TextField(
             controller: usernameCtrl,
             decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.transparent,
               enabledBorder: fieldBorder,
               focusedBorder: fieldBorder.copyWith(
-                borderSide:
-                const BorderSide(color: Color(0xFF2E64A5), width: 2),
+                borderSide: const BorderSide(
+                  color: Color(0xFF2E64A5),
+                  width: 2,
+                ),
               ),
               contentPadding:
               const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             ),
           ),
+
           const SizedBox(height: 16),
 
           // PASSWORD
@@ -64,30 +156,31 @@ class _RegisterPageState extends State<RegisterPage> {
           TextField(
             controller: passwordCtrl,
             obscureText: !passwordVisible,
+            autocorrect: false,
+            enableSuggestions: false,
             decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.transparent,
               enabledBorder: fieldBorder,
               focusedBorder: fieldBorder.copyWith(
-                borderSide:
-                const BorderSide(color: Color(0xFF2E64A5), width: 2),
+                borderSide: const BorderSide(
+                  color: Color(0xFF2E64A5),
+                  width: 2,
+                ),
               ),
               contentPadding:
               const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
               suffixIcon: IconButton(
-                icon: Icon(passwordVisible
-                    ? Icons.visibility
-                    : Icons.visibility_off),
+                icon: Icon(
+                  passwordVisible
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                ),
                 onPressed: () {
                   setState(() => passwordVisible = !passwordVisible);
                 },
               ),
             ),
-            keyboardType: TextInputType.visiblePassword,
-            textInputAction: TextInputAction.next,
-            autocorrect: false,
-            enableSuggestions: false,
           ),
+
           const SizedBox(height: 16),
 
           // CONFIRM PASSWORD
@@ -96,31 +189,32 @@ class _RegisterPageState extends State<RegisterPage> {
           TextField(
             controller: confirmCtrl,
             obscureText: !confirmPasswordVisible,
+            autocorrect: false,
+            enableSuggestions: false,
             decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.transparent,
               enabledBorder: fieldBorder,
               focusedBorder: fieldBorder.copyWith(
-                borderSide:
-                const BorderSide(color: Color(0xFF2E64A5), width: 2),
+                borderSide: const BorderSide(
+                  color: Color(0xFF2E64A5),
+                  width: 2,
+                ),
               ),
               contentPadding:
               const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
               suffixIcon: IconButton(
-                icon: Icon(confirmPasswordVisible
-                    ? Icons.visibility
-                    : Icons.visibility_off),
+                icon: Icon(
+                  confirmPasswordVisible
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                ),
                 onPressed: () {
                   setState(() =>
                   confirmPasswordVisible = !confirmPasswordVisible);
                 },
               ),
             ),
-            keyboardType: TextInputType.visiblePassword,
-            textInputAction: TextInputAction.done,
-            autocorrect: false,
-            enableSuggestions: false,
           ),
+
           const SizedBox(height: 40),
         ],
       ),

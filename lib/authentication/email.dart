@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../components/layout.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class EmailPage extends StatefulWidget {
   const EmailPage({super.key});
@@ -20,27 +20,12 @@ class _EmailPageState extends State<EmailPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailCtrl = TextEditingController();
 
-  Future<void> _createUserAndSendVerification(String email) async {
-    final auth = FirebaseAuth.instance;
+  Future<void> _sendOtp(String email) async {
+    final supabase = Supabase.instance.client;
 
-    final tempPassword = DateTime.now().millisecondsSinceEpoch.toString();
-
-    try {
-      final cred = await auth.createUserWithEmailAndPassword(
-        email: email,
-        password: tempPassword,
-      );
-
-      await cred.user!.sendEmailVerification();
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'email-already-in-use') {
-        throw Exception(
-          'Email already registered. Please login instead.',
-        );
-      } else {
-        rethrow;
-      }
-    }
+    await supabase.auth.signInWithOtp(
+      email: email,
+    );
   }
 
   @override
@@ -56,12 +41,12 @@ class _EmailPageState extends State<EmailPage> {
           final email = emailCtrl.text.trim();
 
           try {
-            await _createUserAndSendVerification(email);
+            await _sendOtp(email);
 
-            Navigator.pushNamed(
+            Navigator.pushReplacementNamed(
               context,
               '/otp',
-              arguments: emailCtrl.text.trim(),
+              arguments: email,
             );
           } catch (e) {
             ScaffoldMessenger.of(context).showSnackBar(
