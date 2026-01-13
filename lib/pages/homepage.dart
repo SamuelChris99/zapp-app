@@ -1,41 +1,130 @@
 import 'package:flutter/material.dart';
-import '../components/carousel.dart';
-import '../components/room_cart.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
-class HomePage extends StatelessWidget {
+import '../components/carousel.dart';
+import '../components/room_cart.dart';
+import 'calculate.dart';
+import 'history.dart';
+import 'news.dart';
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
+
+  final List<Widget> _pages = const [
+    HomeContent(),
+    CalculatePage(),
+    HistoryPage(),
+    NewsPage(),
+  ];
+
+  Widget _navItem(IconData icon, String label, int index) {
+    final bool isActive = _currentIndex == index;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          height: 3,
+          width: isActive ? 70 : 0,
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(height: 6),
+        Icon(
+          icon,
+          color: isActive ? Colors.blue : Colors.grey,
+        ),
+        const SizedBox(height: 6),
+        AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            transitionBuilder: (child, animation){
+              return FadeTransition(opacity: animation, child: child);
+            },
+          child: isActive
+            ? Text(
+                label,
+                key : ValueKey(label),
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.blue,
+                ),
+            )
+          : const SizedBox.shrink(),
+          ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
+        backgroundColor: Colors.white,
+        currentIndex: _currentIndex,
+        type: BottomNavigationBarType.fixed,
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_month_rounded), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.person_rounded), label: ''),
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: _navItem(Icons.home, 'Home', 0),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: _navItem(Icons.calculate, 'Calculate', 1),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: _navItem(Icons.history, 'History', 2),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: _navItem(Icons.newspaper, 'News', 3),
+            label: '',
+          ),
         ],
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: ListView(
-            children: [
-              const SizedBox(height: 16),
-              _header(),
-              const SizedBox(height: 16),
-              const TopCarousel(),
-              const SizedBox(height: 24),
-              _usageHeader(),
-              const SizedBox(height: 12),
-              _roomGrid()
-            ],
-          ),
+
+    );
+  }
+}
+
+class HomeContent extends StatelessWidget {
+  const HomeContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: ListView(
+          children: [
+            const SizedBox(height: 16),
+            _header(),
+            const SizedBox(height: 16),
+            const TopCarousel(),
+            const SizedBox(height: 24),
+            _usageHeader(),
+            const SizedBox(height: 12),
+            _roomGrid(),
+          ],
         ),
       ),
     );
@@ -44,12 +133,7 @@ class HomePage extends StatelessWidget {
   Widget _header() {
     return Row(
       children: [
-        const CircleAvatar(
-          radius: 22,
-          // backgroundImage: NetworkImage(
-          //   "",
-          // ),
-        ),
+        const CircleAvatar(radius: 22),
         const SizedBox(width: 10),
         Expanded(
           child: Column(
@@ -112,13 +196,17 @@ class HomePage extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text("Usage by room",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        const Text(
+          "Usage by room",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
         OutlinedButton(
           onPressed: () {},
           style: OutlinedButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
           child: const Text("+ Add room"),
         ),
