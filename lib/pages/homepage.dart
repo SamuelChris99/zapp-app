@@ -135,18 +135,28 @@ class HomeContent extends StatelessWidget {
   Widget _header(BuildContext context) {
     return Row(
       children: [
-        CircleAvatar(
-          radius: 22,
-          backgroundColor: Colors.grey.shade300,
-          child: ClipOval(
-            child: Image.asset(
-              "assets/icon/profile.jpg",
-              width: 44,
-              height: 44,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(Icons.person, color: Colors.white);
-              },
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NotificationsPage()
+              ),
+            );
+          },
+          child: CircleAvatar(
+            radius: 22,
+            backgroundColor: Colors.grey.shade300,
+            child: ClipOval(
+              child: Image.asset(
+                "assets/icon/profile.jpg",
+                width: 44,
+                height: 44,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.person, color: Colors.white);
+                },
+              ),
             ),
           ),
         ),

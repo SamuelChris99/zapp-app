@@ -44,7 +44,7 @@ class _AddRoomPageState extends State<AddRoom> {
 
     Navigator.pop(context, {
       "name": roomName,
-      "image": _imageFile?.path, // bisa null
+      "image": _imageFile?.path,
     });
   }
 
@@ -54,7 +54,6 @@ class _AddRoomPageState extends State<AddRoom> {
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // HEADER
           Row(
             children: [
               IconButton(
@@ -70,8 +69,6 @@ class _AddRoomPageState extends State<AddRoom> {
           ),
 
           const SizedBox(height: 24),
-
-          // ROOM NAME
           const Text("Enter Room Name", style: TextStyle(fontSize: 14)),
           const SizedBox(height: 8),
           TextField(
@@ -85,8 +82,6 @@ class _AddRoomPageState extends State<AddRoom> {
           ),
 
           const SizedBox(height: 20),
-
-          // IMAGE (OPTIONAL)
           const Text("Background Image (optional)",
               style: TextStyle(fontSize: 14)),
           const SizedBox(height: 8),
