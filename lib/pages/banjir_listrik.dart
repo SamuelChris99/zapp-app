@@ -6,6 +6,7 @@ class NewsDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -16,14 +17,12 @@ class NewsDetailPage extends StatelessWidget {
                 onTap: () => Navigator.pop(context),
                 child: const CircleAvatar(
                   radius: 18,
-                  backgroundColor: Color(0xFFF2F2F2),
+                  backgroundColor: Color(0xFFFFFF),
                   child: Icon(Icons.arrow_back, color: Colors.black),
                 ),
               ),
 
               const SizedBox(height: 20),
-
-              /// TITLE
               const Text(
                 'Banjir Jakarta, Ini 6 Tips Menghindari Sengatan Listrik dalam Air saat Banjir',
                 style: TextStyle(

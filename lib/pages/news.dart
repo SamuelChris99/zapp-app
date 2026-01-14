@@ -45,19 +45,37 @@ class NewsPage extends StatelessWidget {
             title:
             'Rumah di Lereng Gunung Kelud Terbakar Akibat Korsleting Listrik',
             author: 'Samuel',
-            date: '25 Nov 2025',
+            date: 'Nov 25, 2025',
           ),
           NewsItem(
             imagePath: 'assets/images/news4.png',
             title: 'Kebakaran di Universitas Mega Buana Palopo Disebabkan Korsleting Listrik',
             author: 'Samuel',
-            date: '15 Nov 2025',
+            date: 'Nov 15, 2025',
           ),
           NewsItem(
             imagePath: 'assets/images/news5.png',
             title: 'Pahami Penyebab Korsleting Listrik & Cara Mengatasinya',
             author: 'Samuel',
             date: 'Feb 20, 2024',
+          ),
+          NewsItem(
+            imagePath: 'assets/images/carousel3.jpg',
+            title: 'Sering Tertukar, Ini Perbedaan Meteran Listrik dan MCB',
+            author: 'Samuel',
+            date: 'Feb 12, 2024',
+          ),
+          NewsItem(
+            imagePath: 'assets/images/carousel2.jpg',
+            title: 'Waspada Bahaya Listrik di Musim Hujan',
+            author: 'Samuel',
+            date: 'Mar 30, 2024',
+          ),
+          NewsItem(
+            imagePath: 'assets/images/news5.png',
+            title: 'Pahami Penyebab Korsleting Listrik & Cara Mengatasinya',
+            author: 'Samuel',
+            date: 'Apr 10, 2024',
           ),
         ],
       ),
@@ -133,7 +151,7 @@ class NewsItem extends StatelessWidget {
               ],
             ),
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 12),
+              padding: EdgeInsets.symmetric(vertical: 15),
               child: Divider(height: 1),
             ),
           ],
