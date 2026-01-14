@@ -15,138 +15,130 @@ class AccountDetailsPage extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 10),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ===== TITLE =====
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'Account Details',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
 
-            /// TITLE
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                'Account Details',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+          const SizedBox(height: 24),
+
+          // ===== PROFILE IMAGE =====
+          Center(
+            child: Stack(
+              children: [
+                const CircleAvatar(
+                  radius: 45,
+                  backgroundImage: AssetImage('assets/icon/profile.jpg'),
                 ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.camera_alt,
+                      size: 18,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          // ===== USERNAME =====
+          const Center(
+            child: Text(
+              'Darren SN',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
               ),
             ),
+          ),
 
-            const SizedBox(height: 24),
+          const SizedBox(height: 24),
 
-            /// PROFILE IMAGE
-            Center(
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      const CircleAvatar(
-                        radius: 48,
-                        backgroundImage: NetworkImage(
-                          'https://i.pravatar.cc/300',
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 4,
-                              ),
-                            ],
-                          ),
-                          child: const Icon(Icons.camera_alt, size: 18),
-                        ),
-                      ),
-                    ],
+          // ===== USER INFO HEADER (FULL WIDTH) =====
+          Container(
+            width: double.infinity, // 🔥 full kiri kanan
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            color: const Color(0xFFF2F2F2),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Text(
+                  'User Info',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Darren SN',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                Icon(Icons.edit, size: 20),
+              ],
             ),
+          ),
 
-            const SizedBox(height: 30),
+          const SizedBox(height: 16),
 
-            /// ✅ USER INFO HEADER (FULL WIDTH)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              color: Colors.grey.shade100,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    'User Info',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+          // ===== USER INFO CONTENT =====
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Full Name',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey,
                   ),
-                  Icon(Icons.edit, size: 18),
-                ],
-              ),
+                ),
+                SizedBox(height: 6),
+                Text(
+                  'Darren Samuel Nathan',
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+
+                SizedBox(height: 20),
+
+                Text(
+                  'Email',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey,
+                  ),
+                ),
+                SizedBox(height: 6),
+                Text(
+                  'Darrensamuelnathan@gmail.com',
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+              ],
             ),
-
-            const SizedBox(height: 16),
-
-            /// CONTENT WITH PADDING
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Full Name',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black54,
-                    ),
-                  ),
-                  SizedBox(height: 6),
-                  Text(
-                    'Darren Samuel Nathan',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    'Email',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black54,
-                    ),
-                  ),
-                  SizedBox(height: 6),
-                  Text(
-                    'Darrensamuelnathan@gmail.com',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
-
     );
   }
 }

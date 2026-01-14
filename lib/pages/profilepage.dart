@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'account_detail.dart';
+import 'contact_us.dart';
 
 /// ======================================================
 /// PROFILE PAGE
@@ -69,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
             _sectionTitle('Detail Personal'),
 
-            /// 👉 ACCOUNT DETAILS
+            /// 👉 ACCOUNT DETAILS (LINK)
             _menuItem(
               icon: Icons.person,
               title: 'Account Details',
@@ -77,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const AccountDetailsPage(),
+                    builder: (_) => AccountDetailsPage(),
                   ),
                 );
               },
@@ -98,10 +100,18 @@ class _ProfilePageState extends State<ProfilePage> {
 
             _sectionTitle('Other'),
 
+            /// 👉 CONTACT US (LINK)
             _menuItem(
               icon: Icons.contact_support,
               title: 'Contact Us',
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ContactUsPage(),
+                  ),
+                );
+              },
             ),
             _divider(),
 
@@ -126,9 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
       color: Colors.grey.shade200,
       child: Text(
         title,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-        ),
+        style: const TextStyle(fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -178,135 +186,6 @@ class _ProfilePageState extends State<ProfilePage> {
     return const Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Divider(height: 1),
-    );
-  }
-}
-
-/// ======================================================
-/// ACCOUNT DETAILS PAGE
-/// ======================================================
-class AccountDetailsPage extends StatelessWidget {
-  const AccountDetailsPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Account Details',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            /// PROFILE IMAGE
-            Center(
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      const CircleAvatar(
-                        radius: 48,
-                        backgroundImage: AssetImage(
-                          'assets/icon/profile.jpg',
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 4,
-                              ),
-                            ],
-                          ),
-                          child: const Icon(Icons.camera_alt, size: 18),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Darren SN',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            /// USER INFO HEADER
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              color: Colors.grey.shade100,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    'User Info',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  Icon(Icons.edit, size: 18),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            _infoItem('Full Name', 'Darren Samuel Nathan'),
-            const SizedBox(height: 20),
-            _infoItem('Email', 'darrensamuelnathan@gmail.com'),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _infoItem(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 12,
-            color: Colors.black54,
-          ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
     );
   }
 }
