@@ -78,7 +78,7 @@ class _CalculatePageState extends State<CalculatePage> {
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Enter item name'),
+          const Text('Enter item name', style: TextStyle(fontSize: 18)),
           const SizedBox(height: 6),
 
           TextField(
@@ -94,35 +94,40 @@ class _CalculatePageState extends State<CalculatePage> {
           ),
 
           const SizedBox(height: 16),
-          const Text('Room'),
+          const Text('Room', style: TextStyle(fontSize: 18)),
           const SizedBox(height: 6),
 
-          DropdownButtonFormField<String>(
-            value: selectedRoom,
-            isExpanded: true,
-            decoration: InputDecoration(
-              isDense: true,
-              contentPadding:
-              const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+          SizedBox(
+            width: 350,
+            child: DropdownButtonFormField<String>(
+              dropdownColor: Colors.white,
+              value: selectedRoom,
+              isExpanded: true,
+              decoration: InputDecoration(
+                isDense: true,
+                contentPadding:
+                const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
+              items: const [
+                DropdownMenuItem(value: 'Select', child: Text('Select')),
+                DropdownMenuItem(value: 'Kitchen', child: Text('Kitchen')),
+                DropdownMenuItem(value: 'Bedroom', child: Text('Bedroom')),
+                DropdownMenuItem(value: 'Living Room', child: Text('Living Room')),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  selectedRoom = value!;
+                });
+              },
             ),
-            items: const [
-              DropdownMenuItem(value: 'Select', child: Text('Select')),
-              DropdownMenuItem(value: 'Kitchen', child: Text('Kitchen')),
-              DropdownMenuItem(value: 'Bedroom', child: Text('Bedroom')),
-              DropdownMenuItem(value: 'Living Room', child: Text('Living Room')),
-            ],
-            onChanged: (value) {
-              setState(() {
-                selectedRoom = value!;
-              });
-            },
           ),
 
+
           const SizedBox(height: 16),
-          const Text('Usage Days'),
+          const Text('Usage Days', style: TextStyle(fontSize: 18)),
           const SizedBox(height: 6),
 
           GridView.count(
@@ -164,7 +169,7 @@ class _CalculatePageState extends State<CalculatePage> {
           ),
 
           const SizedBox(height: 16),
-          const Text('Start Time'),
+          const Text('Start Time', style: TextStyle(fontSize: 18)),
           const SizedBox(height: 6),
 
           TextField(
@@ -184,7 +189,7 @@ class _CalculatePageState extends State<CalculatePage> {
           ),
 
           const SizedBox(height: 16),
-          const Text('End Time'),
+          const Text('End Time', style: TextStyle(fontSize: 18)),
           const SizedBox(height: 6),
 
           TextField(
@@ -204,7 +209,7 @@ class _CalculatePageState extends State<CalculatePage> {
           ),
 
           const SizedBox(height: 16),
-          const Text('Usage (Watt)'),
+          const Text('Usage (Watt)', style: TextStyle(fontSize: 18)),
           const SizedBox(height: 6),
 
           SizedBox(
