@@ -1,5 +1,12 @@
 
-# ZAPP!
+<h1>
+
+<img width="100" src="https://assets.zapp.software/logo.png">
+<br> ZAPP!
+</h1>
+
+![](https://img.shields.io/badge/Flutter-3.9.2+-blue?logo=flutter) 
+![](https://img.shields.io/badge/Firebase-auth-3DD08F?logo=supabase)
 
 ZAPP! is a mobile application designed to analyze household electricity usage and provide insightful information about energy consumption.  
 The app also aims to educate users on the importance of efficient and sustainable energy usage.
@@ -35,9 +42,7 @@ The app also aims to educate users on the importance of efficient and sustainabl
 | Category | Technology |
 |----------|------------|
 | Client   | Flutter    |
-| Server   | NestJS     |
 | Auth     | Supabase   |
-| Database | Supabase   |
 
 
 ## Installation
