@@ -31,7 +31,7 @@ class _EmailPageState extends State<EmailPage> {
   Future<bool> isEmailRegistered(String email) async {
     final res = await supabase
         .from('profiles')
-        .select('id')
+        .select('user_id')
         .eq('email', email)
         .limit(1);
 
