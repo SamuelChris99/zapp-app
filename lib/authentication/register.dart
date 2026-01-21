@@ -87,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
         UserAttributes(password: password),
       );
       await supabase.from('profiles').insert({
-        'id': user.id,
+        'user_id': user.id,
         'username': username,
         'email': user.email
       });
